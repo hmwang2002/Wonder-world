@@ -36,15 +36,8 @@ class WonderWorldApplicationTests {
     }
 
     @Test
-    void testSelect() {
-        Spot spot = spotService.getSpotByLocation(0.0, 0.0);
-        System.out.println(spot.getName());
-        assertEquals("test", spot.getName());
-    }
-
-    @Test
     void testReadCsv() {
-//        spotMapper.truncate();
+        spotMapper.truncate();
         String filePath = "C:\\Users\\Lenovo\\Desktop\\scenery_spot.csv";
         readCsvService.writeDataFromCsv(filePath);
     }

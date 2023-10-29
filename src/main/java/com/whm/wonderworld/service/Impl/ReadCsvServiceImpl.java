@@ -1,5 +1,6 @@
 package com.whm.wonderworld.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.csvreader.CsvReader;
 import com.whm.wonderworld.domain.entity.Spot;
 import com.whm.wonderworld.mapper.SpotMapper;
@@ -35,7 +36,11 @@ public class ReadCsvServiceImpl implements ReadCsvService {
                         .latitude(Double.parseDouble(csvReader.get("lat")))
                         .longitude(Double.parseDouble(csvReader.get("lng")))
                         .build();
-                spotMapper.insert(spot);
+                // 防止插入重复景点
+                LambdaQueryWrapper<Spot> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(Spot::getName, csvReader.get("dest_name"));
+                Spot spot_ = spotMapper.selectOne(queryWrapper);
+                if (spot_ == null) spotMapper.insert(spot);
             }
             csvReader.close();
         } catch (Exception e) {
